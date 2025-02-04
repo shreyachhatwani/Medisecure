@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { QRCodeCanvas } from "qrcode.react";
+import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid"; // Import UUID function
 
@@ -8,7 +9,9 @@ function GenerateQR() {
   const [dob, setDob] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
-  const [patientId, setPatientId] = useState("");
+  const [qrValue, setQrValue] = useState("");
+  const [generated, setGenerated] = useState(false);
+  const qrRef = useRef(); // Reference for QR Code
 
   const styles = {
     container: {
@@ -25,12 +28,22 @@ function GenerateQR() {
       backgroundColor: "white",
       color: "black"
     },
+    blueStrip: {
+      position: "absolute",
+      top: "0",
+      left: "0",
+      width: "100vw",
+      height: "80px",
+      backgroundColor: "blue",
+      zIndex: "0"
+    },
     header: {
       position: "absolute",
-      top: "10px",
+      top: "20px",
       left: "10px",
       display: "flex",
-      alignItems: "center"
+      alignItems: "center",
+      zIndex: "1"
     },
     logo: {
       width: "50px",
@@ -62,7 +75,14 @@ function GenerateQR() {
       transition: "background-color 0.3s ease",
       fontWeight: "bold"
     },
-    generatedId: {
+    qrContainer: {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      flexDirection: "column",
+      marginTop: "20px"
+    },
+    generatedQR: {
       fontSize: "20px",
       fontWeight: "bold",
       color: "blue",
@@ -70,32 +90,51 @@ function GenerateQR() {
     }
   };
 
-  const handleGenerateId = (e) => {
+  const handleGenerateQR = (e) => {
     e.preventDefault(); // Prevent page reload
-    // Generate a short unique Patient ID
-    const uniqueId = "PAT-" + uuidv4().slice(0, 8);
-    setPatientId(uniqueId);
+    const uniqueQR = `QR-${uuidv4()}`;
+    setQrValue(uniqueQR);
+    setGenerated(true);
+  };
+
+  const handleDownloadQR = () => {
+    const canvas = qrRef.current.querySelector("canvas"); // Get the QR code canvas
+    const url = canvas.toDataURL("image/png"); // Convert to PNG format
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "QR_Code.png"; // Download as QR_Code.png
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   };
 
   return (
     <div style={styles.container}>
+      {/* Blue Strip */}
+      <div style={styles.blueStrip}></div>
+
+      {/* Header Section */}
       <div style={styles.header}>
-        <h1>MEDISECURE</h1>
+        <h1 style={{ color: "white", position: "relative", zIndex: "2" }}>MEDISECURE</h1>
         <img src="https://www.creativefabrica.com/wp-content/uploads/2021/01/29/Valentine-Kawaii-Stethoscope-Vector-Graphics-8184507-1.png" alt="Logo" style={styles.logo} />
       </div>
-      <form style={styles.form} onSubmit={handleGenerateId}>
+
+      {/* Form Section */}
+      <form style={styles.form} onSubmit={handleGenerateQR}>
         <input type="text" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} required style={styles.input} /><br />
         <input type="date" placeholder="Date of Birth" value={dob} onChange={(e) => setDob(e.target.value)} required style={styles.input} /><br />
         <input type="tel" placeholder="Phone No." value={phone} onChange={(e) => setPhone(e.target.value)} required style={styles.input} /><br />
         <textarea placeholder="Address" value={address} onChange={(e) => setAddress(e.target.value)} required style={styles.input}></textarea><br />
-        <button type="submit" style={styles.button}>Generate Patient ID</button>
+        <button type="submit" style={styles.button}>Generate QR Code</button>
       </form>
 
-      {/* Display the Generated ID */}
-      {patientId && (
-        <div>
-          <h3>Generated Patient ID:</h3>
-          <p style={styles.generatedId}>{patientId}</p>
+      {/* Display and Download QR Code */}
+      {generated && (
+        <div style={styles.qrContainer} ref={qrRef}>
+          <h3>Generated QR Code:</h3>
+          <QRCodeCanvas value={qrValue} size={200} />
+          <p style={styles.generatedQR}>{qrValue}</p>
+          <button onClick={handleDownloadQR} style={styles.button}>Download QR</button>
         </div>
       )}
 

@@ -38,12 +38,22 @@ function GenerateLink() {
       backgroundColor: "white",
       color: "black"
     },
+    blueStrip: {
+      position: "absolute",
+      top: "0",
+      left: "0",
+      width: "100vw",
+      height: "80px",
+      backgroundColor: "blue",
+      zIndex: "0" // Fix: Puts the blue strip behind other elements
+    },
     header: {
       position: "absolute",
-      top: "10px",
+      top: "20px",
       left: "10px",
       display: "flex",
-      alignItems: "center"
+      alignItems: "center",
+      zIndex: "1"
     },
     logo: {
       width: "50px",
@@ -89,8 +99,11 @@ function GenerateLink() {
 
   return (
     <div style={styles.container}>
+      {/* Blue Strip */}
+      <div style={styles.blueStrip}></div>
+
       <div style={styles.header}>
-        <h1>MEDISECURE</h1>
+        <h1 style={{ color: "white", position: "relative", zIndex: "1" }}>MEDISECURE</h1>
         <img 
           src="https://www.creativefabrica.com/wp-content/uploads/2021/01/29/Valentine-Kawaii-Stethoscope-Vector-Graphics-8184507-1.png" 
           alt="Logo" 

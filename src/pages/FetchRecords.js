@@ -18,12 +18,22 @@ function FetchRecords() {
       backgroundColor: "white",
       color: "black"
     },
+    blueStrip: {
+      position: "absolute",
+      top: "0",
+      left: "0",
+      width: "100vw",
+      height: "80px",
+      backgroundColor: "blue",
+      zIndex: "0" // Fix: Ensures blue strip is behind everything
+    },
     header: {
       position: "absolute",
-      top: "10px",
+      top: "20px",
       left: "10px",
       display: "flex",
-      alignItems: "center"
+      alignItems: "center",
+      zIndex: "2" // Keeps MEDISECURE text above the strip
     },
     logo: {
       width: "50px",
@@ -62,8 +72,11 @@ function FetchRecords() {
 
   return (
     <div style={styles.container}>
+      {/* Blue Strip */}
+      <div style={styles.blueStrip}></div>
+
       <div style={styles.header}>
-        <h1>MEDISECURE</h1>
+        <h1 style={{ color: "white", position: "relative", zIndex: "2" }}>MEDISECURE</h1>
         <img 
           src="https://www.creativefabrica.com/wp-content/uploads/2021/01/29/Valentine-Kawaii-Stethoscope-Vector-Graphics-8184507-1.png" 
           alt="Logo" 

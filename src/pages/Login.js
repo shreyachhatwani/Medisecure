@@ -19,12 +19,22 @@ function Login() {
       backgroundColor: "white",
       color: "black"
     },
+    blueStrip: {
+      position: "absolute",
+      top: "0",
+      left: "0",
+      width: "100%",
+      height: "80px", // Increased height for visibility
+      backgroundColor: "blue",
+      zIndex: "1" // Ensuring it's above the background
+    },
     header: {
       position: "absolute",
-      top: "10px",
+      top: "20px", // Adjusted to fit within the blue strip
       left: "10px",
       display: "flex",
-      alignItems: "center"
+      alignItems: "center",
+      zIndex: "2" // Making sure text is above the strip
     },
     logo: {
       width: "50px",
@@ -35,7 +45,8 @@ function Login() {
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
-      gap: "10px"
+      gap: "10px",
+      marginTop: "100px" // Push form down to avoid overlapping strip
     },
     input: {
       padding: "10px",
@@ -60,10 +71,20 @@ function Login() {
 
   return (
     <div style={styles.loginContainer}>
+      {/* Blue Strip */}
+      <div style={styles.blueStrip}></div>
+
+      {/* Header Section */}
       <div style={styles.header}>
-        <h1>MEDISECURE</h1>
-        <img src="https://www.creativefabrica.com/wp-content/uploads/2021/01/29/Valentine-Kawaii-Stethoscope-Vector-Graphics-8184507-1.png" alt="Logo" style={styles.logo} />
+        <h1 style={{ color: "white", position: "relative", zIndex: "2" }}>MEDISECURE</h1>
+        <img 
+          src="https://www.creativefabrica.com/wp-content/uploads/2021/01/29/Valentine-Kawaii-Stethoscope-Vector-Graphics-8184507-1.png" 
+          alt="Logo" 
+          style={styles.logo} 
+        />
       </div>
+
+      {/* Form Section */}
       <form
         style={styles.form}
         onSubmit={(e) => {
